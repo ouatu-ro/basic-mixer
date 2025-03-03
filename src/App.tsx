@@ -7,13 +7,11 @@ const [state, setState] = createStore({
     {
       start: 1.0,
       end: 2.0,
-      audioUrl: "./src/assets/1sec.mp3",
       audio: new Audio("/src/assets/1sec.mp3"),
     },
     {
       start: 4.0,
       end: 6.0,
-      audioUrl: "./assets/2sec.mp3",
       audio: new Audio("/src/assets/2sec.mp3"),
     },
   ],
