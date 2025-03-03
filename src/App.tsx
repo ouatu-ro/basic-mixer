@@ -7,35 +7,49 @@ const [state, setState] = createStore({
     {
       start: 1.0,
       end: 2.0,
-      audio: new Audio("/src/assets/1sec.mp3"),
+      audio: new Audio("./src/assets/1sec.mp3"),
     },
     {
       start: 4.0,
       end: 6.0,
-      audio: new Audio("/src/assets/2sec.mp3"),
+      audio: new Audio("./src/assets/2sec.mp3"),
     },
   ],
-  globalPlayHeadPosition: 3.0,
+  globalPlayHeadPosition: 0.0,
   isPlaying: false,
   trackDuration: 10.0,
 });
 
-// Example functions to update state
-const play = () => setState("isPlaying", true);
-const pause = () => setState("isPlaying", false);
-
 function PlayerControls() {
+  const togglePlay = (e: MouseEvent | undefined = undefined) => {
+    setState("isPlaying", (prev) => !prev);
+    if (e) {
+      (e.target as HTMLButtonElement)?.blur();
+    }
+  };
+  createEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.code === "Space") {
+        togglePlay();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    onCleanup(() => {
+      window.removeEventListener("keydown", handleKeyDown);
+    });
+  });
   return (
     <div>
-      <p>Playhead Position: {state.globalPlayHeadPosition}</p>
-      <p>Status: {state.isPlaying ? "Playing" : "Paused"}</p>
-      <button onClick={play}>Play</button>
-      <button onClick={pause}>Pause</button>
+      <button onClick={togglePlay} tabIndex={-1}>
+        {state.isPlaying ? "Pause" : "Play"}
+      </button>
     </div>
   );
 }
 
-function Clip(props: { start: number; end: number; audioUrl: string }) {
+function Clip(props: { start: number; end: number }) {
   return (
     <div
       style={{
@@ -47,9 +61,7 @@ function Clip(props: { start: number; end: number; audioUrl: string }) {
         opacity: "0.5",
         border: "1px solid, black",
       }}
-    >
-      {props.audioUrl}
-    </div>
+    ></div>
   );
 }
 
@@ -92,6 +104,10 @@ function Track() {
         clip.audio.pause();
       }
     });
+    if (state.globalPlayHeadPosition >= state.trackDuration) {
+      setState("globalPlayHeadPosition", 0);
+      setState("isPlaying", false);
+    }
   });
   return (
     <div
@@ -100,6 +116,7 @@ function Track() {
         width: state.trackDuration * 100 + "px",
         height: "100px",
         border: "1px solid black",
+        left: "50px",
         // overflow: "scroll",
       }}
       onClick={(e) => {
@@ -119,7 +136,7 @@ function Track() {
         }}
       ></div>
       {state.clipSlice.map((clip) => (
-        <Clip start={clip.start} end={clip.end} audioUrl={clip.audioUrl}></Clip>
+        <Clip start={clip.start} end={clip.end}></Clip>
       ))}
     </div>
   );
