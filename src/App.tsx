@@ -1,18 +1,20 @@
 import { createEffect, onCleanup, type Component } from "solid-js";
 
 import { createStore } from "solid-js/store";
+import clip1Src from "./assets/1sec.mp3";
+import clip2Src from "./assets/2sec.mp3";
 
 const [state, setState] = createStore({
   clipSlice: [
     {
       start: 1.0,
       end: 2.0,
-      audio: new Audio("./src/assets/1sec.mp3"),
+      audio: new Audio(clip1Src),
     },
     {
       start: 4.0,
       end: 6.0,
-      audio: new Audio("./src/assets/2sec.mp3"),
+      audio: new Audio(clip2Src),
     },
   ],
   globalPlayHeadPosition: 0.0,
