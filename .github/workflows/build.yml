@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Trigger the workflow when pushing to main
+      - master # Trigger the workflow when pushing to master
 
 permissions:
   contents: read # Required for checking out the repository
