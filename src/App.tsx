@@ -20,6 +20,7 @@ const [state, setState] = createStore({
   globalPlayHeadPosition: 0.0,
   isPlaying: false,
   trackDuration: 10.0,
+  scale: 100,
 });
 
 function PlayerControls() {
@@ -47,6 +48,14 @@ function PlayerControls() {
       <button onClick={togglePlay} tabIndex={-1}>
         {state.isPlaying ? "Pause" : "Play"}
       </button>
+      <input
+        type="range"
+        min="50"
+        max="200"
+        step="0.1"
+        value={state.scale}
+        onInput={(e) => setState("scale", parseFloat(e.currentTarget.value))}
+      />
     </div>
   );
 }
@@ -56,8 +65,8 @@ function Clip(props: { start: number; end: number }) {
     <div
       style={{
         position: "absolute",
-        left: props.start * 100 + "px",
-        width: (props.end - props.start) * 100 + "px",
+        left: props.start * state.scale + "px",
+        width: (props.end - props.start) * state.scale + "px",
         height: "inherit",
         "background-color": "red",
         opacity: "0.5",
@@ -115,7 +124,7 @@ function Track() {
     <div
       style={{
         position: "relative",
-        width: state.trackDuration * 100 + "px",
+        width: state.trackDuration * state.scale + "px",
         height: "100px",
         border: "1px solid black",
         left: "50px",
@@ -123,15 +132,18 @@ function Track() {
       }}
       onClick={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
+        console.log(rect);
         const x = e.clientX - rect.left;
+        console.log(x);
         const percentage = x / rect.width;
+        console.log(percentage);
         setState("globalPlayHeadPosition", state.trackDuration * percentage);
       }}
     >
       <div
         style={{
           position: "absolute",
-          left: state.globalPlayHeadPosition * 100 + "px",
+          left: state.globalPlayHeadPosition * state.scale + "px",
           width: "2px",
           height: "inherit",
           "background-color": "green",
