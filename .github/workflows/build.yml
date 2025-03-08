@@ -12,20 +12,25 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        node-version: [20]
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4 # Clones the repo
 
-      - name: Setup Node.js
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 18 # Compatible with Vite
+          node-version: ${{ matrix.node-version }}
           cache: "pnpm" # Cache pnpm dependencies
-
-      - name: Install pnpm
-        run: npm install -g pnpm
 
       - name: Install Dependencies
         run: pnpm install
@@ -40,7 +45,7 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Deploy to GitHub Pages
