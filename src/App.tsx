@@ -3,7 +3,7 @@ import { createEffect, onCleanup, type Component } from "solid-js";
 import { createStore } from "solid-js/store";
 import clip1Src from "./assets/1sec.mp3";
 import clip2Src from "./assets/2sec.mp3";
-console.log("CI/CD test");
+console.log("PNPM test");
 const [state, setState] = createStore({
   clipSlice: [
     {

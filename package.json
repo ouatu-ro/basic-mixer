@@ -17,5 +17,10 @@
   },
   "dependencies": {
     "solid-js": "^1.9.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
