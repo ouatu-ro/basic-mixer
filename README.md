@@ -31,4 +31,5 @@ Your app is ready to be deployed!
 
 ## Deployment
 
-You can deploy the `dist` folder to any static host provider (netlify, surge, now, etc.)
+This project is intended to be run locally. Build output is written to `dist/`
+if you need a production bundle for manual inspection.
